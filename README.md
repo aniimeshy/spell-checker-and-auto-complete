@@ -1,13 +1,24 @@
-# Spell Checker and Auto-Complete
+# Spell Checker & Auto-Complete
 
-A Java desktop spell checker and word auto-complete tool backed by a Trie. The project also includes a small console demo.
+A Java project that combines a trie-based dictionary with a polished Swing interface for word checking and prefix auto-completion. It includes both a desktop GUI and a console demo that loads dictionary data and tests correction suggestions.
 
 ## Features
 
-- Look up words in a dictionary.
-- Suggest close spellings using Levenshtein edit distance.
-- Find dictionary words matching a prefix.
-- Load dictionary entries from the Oxford CSV files in `Dictionary_eng/`.
+- Dictionary lookup for exact words
+- Prefix-based auto-complete suggestions
+- Misspelling detection with ranked correction suggestions
+- Inline suggestion preview in the text field
+- Clickable result words that insert directly into the input box
+- Desktop UI built with Swing and custom glass-style panels
+
+## Project structure
+
+- `Trie.java` – trie implementation for insert/search/auto-complete operations
+- `SpellChecker.java` – typo suggestion engine using edit-distance-based ranking
+- `SpellCheckerGUI.java` – desktop application with the GUI
+- `Main.java` – console demo for dictionary loading and testing
+- `dictionary.txt` – main dictionary file used by the GUI
+- `Dictionary_eng/` – CSV dictionary files used by the console demo
 
 ## Requirements
 
@@ -15,14 +26,18 @@ A Java desktop spell checker and word auto-complete tool backed by a Trie. The p
 
 ## Run the desktop app
 
-From the repository root, compile the source files and launch the Swing interface:
+From the project root, compile and launch the Swing interface:
 
 ```powershell
-javac -source 8 -target 8 Main.java Trie.java SpellChecker.java SpellCheckerGUI.java
+javac -source 8 -target 8 Trie.java SpellChecker.java SpellCheckerGUI.java
 java SpellCheckerGUI
 ```
 
-Enter a word and select **Check Spelling**, or enter a prefix and select **Auto-Complete**. The Oxford dictionary folder (`Dictionary_eng/`) must remain in the working directory.
+Notes:
+
+- The GUI expects `dictionary.txt` in the working directory.
+- Type a word to check spelling or a prefix to trigger auto-complete.
+- Press `Tab` to accept the displayed inline suggestion.
 
 ## Run the console demo
 
@@ -31,8 +46,30 @@ javac -source 8 -target 8 Main.java Trie.java SpellChecker.java
 java Main
 ```
 
-The demo loads the dictionary, prints auto-complete results for `app`, and checks the sample word `aple`.
+The console demo loads the CSV dictionary files from `Dictionary_eng/`, prints auto-complete results for `app`, and checks the sample word `aple`.
 
-## Dictionary format
+## Dictionary formats
 
-The project reads all `*.csv` files inside `Dictionary_eng/`. Each line is normalized to lowercase and cleaned before being inserted into the trie.
+### GUI dictionary
+
+`dictionary.txt` should contain one word per line, for example:
+
+```text
+apple
+apricot
+banana
+```
+
+The GUI reads the file, trims whitespace, lowercases each entry, and inserts it into the trie.
+
+### Console dictionary
+
+`Main.java` reads all `*.csv` files in `Dictionary_eng/`, splits entries by commas, normalizes them to lowercase, removes punctuation, and inserts valid words into the trie.
+
+## Example usage
+
+1. Start the GUI.
+2. Enter a prefix such as `ap`.
+3. Press `Tab` to accept the suggestion or use the auto-complete button.
+4. Check a misspelled word such as `aple` to view corrections.
+5. Click any word in the results panel to place it back into the input field.
